@@ -1,9 +1,14 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
-import React from "react";
+import React, { useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 
 const Hero = () => {
+  const videoRef = useRef();
+
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
   useGSAP(() => {
     const heroSplit = new SplitText(".title", { type: "chars,words" });
 
@@ -38,6 +43,46 @@ const Hero = () => {
       })
       .to(".left-leaf", { y: -200 }, 0)
       .to(".right-leaf", { y: 200 }, 0);
+
+    const startValue = isMobile ? "top 50%" : "center 60%";
+    const endValue = isMobile ? "bottom 0%" : "bottom 0%";
+
+    const handleVideoLoaded = () => {
+      gsap.to(videoRef.current, {
+        scrollTrigger: {
+          trigger: "#hero",
+          start: startValue,
+          end: endValue,
+          scrub: 1,
+          onUpdate: (self) => {
+            if (videoRef.current && videoRef.current.duration) {
+              videoRef.current.currentTime =
+                self.progress * videoRef.current.duration;
+            }
+          },
+        },
+        scale: 1.1,
+        opacity: 0.6,
+        duration: 1,
+      });
+    };
+
+    if (videoRef.current) {
+      if (videoRef.current.readyState >= 1) {
+        handleVideoLoaded();
+      } else {
+        videoRef.current.addEventListener("loadedmetadata", handleVideoLoaded);
+      }
+    }
+
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.removeEventListener(
+          "loadedmetadata",
+          handleVideoLoaded,
+        );
+      }
+    };
   }, []);
   return (
     <>
@@ -76,6 +121,16 @@ const Hero = () => {
           </div>
         </div>
       </section>
+
+      <div className="video fixed inset-0 w-screen h-screen pointer-events-none">
+        <video
+          ref={videoRef}
+          src="/videos/output.mp4"
+          muted
+          playsInline
+          preload="metadata"
+        />
+      </div>
     </>
   );
 };
