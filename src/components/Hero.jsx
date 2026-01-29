@@ -65,6 +65,18 @@ const Hero = () => {
         opacity: 0.6,
         duration: 1,
       });
+
+      // Hide video after cocktails section
+      gsap.to(".video", {
+        scrollTrigger: {
+          trigger: "#about",
+          start: "top 80%",
+          end: "top top",
+          scrub: 1,
+        },
+        opacity: 0,
+        pointerEvents: "none",
+      });
     };
 
     if (videoRef.current) {
