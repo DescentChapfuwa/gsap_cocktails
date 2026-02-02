@@ -22,7 +22,7 @@ const Menu = () => {
       { yPercent: 100, opacity: 0 },
       { yPercent: 0, opacity: 100, ease: "power1.inOut" },
     );
-     gsap.fromTo(
+    gsap.fromTo(
       ".details p ",
       { yPercent: 100, opacity: 0 },
       { yPercent: 0, opacity: 100, ease: "power1.inOut" },
@@ -117,16 +117,18 @@ const Menu = () => {
           <img src={currentCocktail.image} alt="" className="object-contain" />
         </div>
 
-        <div className="recipe lg:mr-40">
+        <div className="recipe">
           <div className="info" ref={contentRef}>
             <p>Recipe for:</p>
             <p id="title">{currentCocktail.name}</p>
           </div>
         </div>
 
-        <div className="details">
-          <h2>{currentCocktail.title}</h2>
-          <p className="font-bold ">{currentCocktail.description}</p>
+        <div className="space-y-5 md:max-w-md text-left">
+          <h2 className="md:text-5xl text-3xl font-serif">
+            {currentCocktail.title}
+          </h2>
+          <p className="md:text-lg pe-5">{currentCocktail.description}</p>
         </div>
       </div>
     </section>
